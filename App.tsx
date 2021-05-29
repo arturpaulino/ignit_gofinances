@@ -11,6 +11,8 @@ import {
 import theme from "./src/global//styles/theme";
 import {Dashboard} from "./src/screens/Dashboard";
 import {Register} from "./src/screens/Register";
+import {CategorySelect} from "./src/screens/CategorySelect";
+
 //      <Dashboard />
 
 
@@ -24,7 +26,7 @@ export default function App() {
   if (!fontLoading) return <Apploading />;
   return (
     <ThemeProvider theme={theme}>
-      <Register/>
+      <CategorySelect/>
     </ThemeProvider>
   );
 }

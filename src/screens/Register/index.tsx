@@ -4,6 +4,7 @@ import {Container, Header, Title, Form, Fields, TransactionTypes} from "./styles
 import {Input} from "../../compontes/Form/Input";
 import {Button} from "../../compontes/Form/Button";
 import {TransactionTypeButton} from "../../compontes/Form/TransactionTypeButton";
+import {CategorySelectButton} from "../../compontes/Form/CategorySelectButton";
 
 export function Register() {
   const [transactionType, SetTransactionType] = useState("");
@@ -37,6 +38,8 @@ export function Register() {
 
         ></TransactionTypeButton>
           </TransactionTypes>
+          <CategorySelectButton title="Categoria"></CategorySelectButton>
+
         </Fields>
         <Button title="Enviar"></Button>
       </Form>
