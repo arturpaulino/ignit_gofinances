@@ -1,8 +1,9 @@
 import styled from 'styled-components/native';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
-import { TextInput } from "react-native";
+import {TouchableOpacity } from "react-native";
 
-export const Container = styled.View`    width:100%;
+export const Container = styled(TouchableOpacity)`
+   width:100%;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.secondary};
 
