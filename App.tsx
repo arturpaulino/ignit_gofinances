@@ -1,5 +1,7 @@
 import React from "react";
+import "react-native-gesture-handler";
 import {ThemeProvider} from "styled-components";
+import {NavigationContainer} from "@react-navigation/native";
 import Apploading from "expo-app-loading";
 import {
   useFonts,
@@ -9,11 +11,7 @@ import {
 } from "@expo-google-fonts/poppins";
 
 import theme from "./src/global//styles/theme";
-import {Dashboard} from "./src/screens/Dashboard";
-import {Register} from "./src/screens/Register";
-
-//<Dashboard />
-
+import {AppRoutes} from "./src/routes/app.routes";
 
 export default function App() {
   const [fontLoading] = useFonts({
@@ -25,7 +23,9 @@ export default function App() {
   if (!fontLoading) return <Apploading />;
   return (
     <ThemeProvider theme={theme}>
-    <Register/>
+      <NavigationContainer>
+        <AppRoutes />
+      </NavigationContainer>
     </ThemeProvider>
   );
 }
