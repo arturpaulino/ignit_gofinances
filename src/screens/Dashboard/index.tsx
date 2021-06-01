@@ -1,12 +1,12 @@
-import React from "react";
-import {View, Text} from "react-native";
-import {Transition} from "react-native-reanimated";
+import React, {useEffect, useState} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useFocusEffect} from "@react-navigation/native";
+
 import {HighlightCard} from "../../compontes/HighlightCard";
 import {
   TransactionCard,
   TransactionCardProps,
 } from "../../compontes/TransactionCard";
-
 import {
   Container,
   Header,
@@ -21,7 +21,7 @@ import {
   Transactions,
   TransactionList,
   Title,
-  LogoutButton
+  LogoutButton,
 } from "./styles";
 
 export interface DataListProps extends TransactionCardProps {
@@ -29,30 +29,63 @@ export interface DataListProps extends TransactionCardProps {
 }
 
 export function Dashboard() {
-  const data: DataListProps[] = [
-    {
-      id: "1",
-      type: "positive",
-      title: "Desenvolemento Site",
-      amount: "R$ 12.000,00",
-      category: {
-        name: "Vendas",
-        icon: "dollar-sign",
-      },
-      date: "13/042022",
-    },
-    {
-      id: "2",
-      type: "negative",
-      title: "Desenvolemento App",
-      amount: "R$ 10.000,00",
-      category: {
-        name: "Vendas",
-        icon: "coffee",
-      },
-      date: "13/042022",
-    },
-  ];
+  const [data, setData] = useState<DataListProps[]>([]);
+
+  async function loadTransactions() {
+    const dataKey = "@gofinances:transctions";
+    const response = await AsyncStorage.getItem(dataKey);
+    const transactions = response ? JSON.parse(response) : [];
+
+    let entriessum = 0;
+    let expensive =0;
+
+
+    const transactionsFormatted: DataListProps[] = transactions.map(
+      (item: DataListProps) => {
+
+        if( item.type === 'positive' ) {
+          entriessum += Number(item.amount)
+        }else {
+          expensive += Number(item.amount)
+        }
+
+        const amount = Number(item.amount).toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        });
+        console.log("amount", amount);
+
+        const date = Intl.DateTimeFormat("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "2-digit",
+        }).format(new Date(item.date));
+
+        return {
+          id: item.id,
+          name: item.name,
+          amount: amount,
+          type: item.type,
+          category: item.category,
+          date,
+        };
+      }
+    );
+    setData(transactionsFormatted);
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      loadTransactions();
+    }, [])
+  );
+
+  useEffect(() => {
+    //  const dataKey = "@gofinances:transctions";
+    //    const response =  AsyncStorage.removeItem(dataKey);
+
+    loadTransactions();
+  }, []);
 
   return (
     <Container>
@@ -69,9 +102,9 @@ export function Dashboard() {
               <UserName>Artur Palino</UserName>
             </User>
           </UserInfo>
-          <LogoutButton onPress={ ()=>{  }} >
-           <Icon name="power" />
-           </LogoutButton>
+          <LogoutButton onPress={() => {}}>
+            <Icon name="power" />
+          </LogoutButton>
         </UserWrapper>
       </Header>
 
