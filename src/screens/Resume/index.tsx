@@ -23,6 +23,8 @@ import {categories} from "../../utils/categories";
 import {ActivityIndicator} from "react-native";
 import {HistoryCard} from "../../compontes/HistoryCard";
 
+import {  useAuth } from "../../hooks/auth";
+
 export interface TransactionData {
   type: "positive" | "negative";
   name: string;
@@ -44,7 +46,7 @@ export function Resume() {
   const  [selectDate, setSelectDate] = useState(new Date());
   const [isLoading, setisLoading] = useState(false);
   const [totalByResumo, setTotalByResumo] = useState<categoryData[]>([]);
-
+  const  { user } = useAuth()
   function handlDateChange(action: 'next' | 'prev') {
     if (action === 'next') {
       setSelectDate( addMonths(selectDate,1))
@@ -58,7 +60,8 @@ export function Resume() {
   async function loadTransactions() {
     setisLoading(true);
 
-    const dataKey = "@gofinances:transctions";
+
+    const dataKey = `@gofinances:transctions_users:${user.id}`
     const data = await AsyncStorage.getItem(dataKey);
     const currentData = data ? JSON.parse(data) : [];
 

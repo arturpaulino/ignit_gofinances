@@ -21,6 +21,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import uuid from  "react-native-uuid";
 
+import {  useAuth } from "../../hooks/auth";
+
 
 
 interface  FormData {
@@ -29,6 +31,8 @@ interface  FormData {
 }
 
 export function Register() {
+
+  const  { user  } = useAuth()
   const [transactionType, setTransactionType] = useState("");
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [category, setCategory] = useState({
@@ -40,7 +44,7 @@ export function Register() {
     name: yup.string().required("Nome e obrigadotiro"),
     amount: yup.number().required("Valor e obrigatorio"),
   });
-  const dataKey = "@gofinances:transctions"
+  const dataKey = `@gofinances:transctions_users:${user.id}`
   const { control, handleSubmit, reset,  formState:{ errors } } = useForm(
     {resolver: yupResolver(schema)})
 

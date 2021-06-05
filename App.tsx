@@ -4,7 +4,7 @@ import 'intl'
 import 'intl/locale-data/jsonp/pt-BR'
 
 import {ThemeProvider} from "styled-components";
-import {NavigationContainer} from "@react-navigation/native";
+import { Routes } from "./src/routes";
 import Apploading from "expo-app-loading";
 import {
   useFonts,
@@ -13,29 +13,28 @@ import {
   Poppins_700Bold,
 } from "@expo-google-fonts/poppins";
 
+import {  useAuth } from "./src/hooks/auth";
 
 
 import theme from "./src/global//styles/theme";
-import {AppRoutes} from "./src/routes/app.routes";
-import {SignIn} from "./src/screens/SignIn"
 import { AuthProvider} from "./src/hooks/auth";
 
 export default function App() {
+  const  {isLoading   } = useAuth()
+
   const [fontLoading] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
     Poppins_700Bold,
   });
 
-  if (!fontLoading) return <Apploading />;
+  if ( (!fontLoading) || isLoading ) return <Apploading />;
   return (
     <ThemeProvider theme={theme}>
-      <NavigationContainer>
         <AuthProvider>
-          <SignIn></SignIn>
+          <Routes/>
         </AuthProvider>
 
-      </NavigationContainer>
     </ThemeProvider>
   );
 }
